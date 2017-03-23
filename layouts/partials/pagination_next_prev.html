@@ -1,0 +1,9 @@
+{{ $p := .Paginator }}
+
+{{ if $p.HasPrev }}
+	<a href="{{ $p.Prev.URL }}" class="btn"> &lt;====| </a>
+{{ end }}
+
+{{ if $p.HasNext }}
+	<a href="{{ $p.Next.URL }}" class="btn"> |====&gt; </a>
+{{ end }}

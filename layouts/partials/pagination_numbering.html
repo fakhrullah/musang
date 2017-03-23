@@ -1,0 +1,82 @@
+<!-- 
+
+    PageNumber: The current page’s number in the pager sequence
+    URL: The relative URL to the current pager
+    Pages: The pages in the current pager
+    NumberOfElements: The number of elements on this page
+    HasPrev: Whether there are page(s) before the current
+    Prev: The pager for the previous page
+    HasNext: Whether there are page(s) after the current
+    Next: The pager for the next page
+    First: The pager for the first page
+    Last: The pager for the last page
+    Pagers: A list of pagers that can be used to build a pagination menu
+    PageSize: Size of each pager
+    TotalPages: The number of pages in the paginator
+    TotalNumberOfElements: The number of elements on all pages in this paginator
+
+ -->
+{{ $p := .Paginator }}
+{{ if gt $p.TotalPages 1 }}
+<div class="pagination-wrapper">
+	<ul class="pagination">
+		{{ with $p.First }}
+		<li class="first{{ if eq $p.PageNumber 1 }} current{{ end }}
+			{{ if eq $p.PageNumber 2 }} prev{{ end }}">
+			<a href="{{.URL}}">1</a>
+		</li>
+		{{ end }}
+
+		{{ if eq $p.PageNumber 1 }}
+		{{ else if eq $p.PageNumber 2}}
+		{{ else if eq $p.PageNumber $p.Prev.PageNumber}}
+		{{ else if eq $p.Prev.PageNumber 2}}
+			<!-- write nothing because no space between 1st and current page -->
+		{{ else }}
+		<li class="in-between">...</li>
+		{{ end }}
+
+		{{ if $p.HasPrev }}
+			{{ if ne $p.Prev.PageNumber 1}}
+			<li class="prev">
+				<a href="{{$p.Prev.URL}}">{{$p.Prev.PageNumber}}</a>
+			</li>
+			{{ end }}
+		{{ end }}
+
+		{{ if eq $p.PageNumber 1 }}
+		{{ else if eq $p.PageNumber $p.Last.PageNumber }}
+			<!-- write nothing because first and last page is already writen -->
+		{{ else }}
+		<li class="current">
+			<a href="{{$p.URL}}">{{ $p.PageNumber }}</a>
+		</li>
+		{{ end }}
+
+		{{ if $p.HasNext }}
+			{{ if ne $p.Next.PageNumber $p.Last.PageNumber}}
+			<li class="next">
+				<a href="{{$p.Next.URL}}">{{$p.Next.PageNumber}}</a>
+			</li>
+			{{ end }}
+		{{ end }}
+
+		{{ if eq $p.PageNumber $p.Last.PageNumber }}
+		{{ else if eq $p.PageNumber (sub $p.Last.PageNumber 1) }}
+		{{ else if eq $p.PageNumber $p.Next.PageNumber }}
+		{{ else if eq $p.Next.PageNumber (sub $p.Last.PageNumber 1) }}
+			<!-- write nothing because no space between last page and current page -->
+		{{ else }}
+		<li class="in-between">...</li>
+		{{ end }}
+
+		{{ with $p.Last }}
+		<li class="last{{ if eq $p.PageNumber .PageNumber }} current{{ end }}
+			{{ if eq $p.PageNumber (sub .PageNumber 1) }} next{{ end }}">
+			<a href="{{.URL}}">{{.PageNumber}}</a>
+		</li>
+		{{ end }}		
+
+	</ul>
+</div>
+{{ end }}
