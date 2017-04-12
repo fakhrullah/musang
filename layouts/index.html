@@ -9,8 +9,8 @@
   <div class="content container">
     <div class="posts">
       {{ $contentsPerPage := default 12 (.Site.Params.themeOptions.contentsPerPage) }}
-      {{ range (.Paginator $contentsPerPage).Pages.ByDate.Reverse }}
-        <div class="post">
+      {{ range (.Paginator $contentsPerPage).Pages }}
+        <div class="post{{ with .Weight }} pinned{{ end }}">
           <h1 class="post-title">
             <a href="{{ .Permalink }}">
               {{ .Title }}
